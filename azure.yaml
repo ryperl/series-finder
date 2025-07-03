@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: series-finder
+metadata:
+  template: series-finder@0.0.1-beta
+
+services:
+  # Backend API (Azure Functions)
+  backend:
+    project: ./backend
+    host: function
+    language: js
+        
+  # Frontend (Static Web App)
+  frontend:
+    project: ./frontend
+    host: staticwebapp
+    language: js
