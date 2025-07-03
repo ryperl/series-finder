@@ -12,14 +12,25 @@ export class CosmosDbService {
   constructor() {
     const endpoint = process.env.COSMOS_DB_ENDPOINT!;
     const databaseName = process.env.COSMOS_DB_DATABASE_NAME!;
+    const cosmosKey = process.env.COSMOS_DB_KEY;
 
-    // Use managed identity for authentication
-    const credential = new DefaultAzureCredential();
-    
-    this.client = new CosmosClient({
-      endpoint,
-      aadCredentials: credential
-    });
+    // For local development with emulator, use master key
+    // For production, use managed identity
+    if (cosmosKey && process.env.NODE_ENV === 'development') {
+      console.log('🔧 Using Cosmos DB Emulator with master key');
+      this.client = new CosmosClient({
+        endpoint,
+        key: cosmosKey
+      });
+    } else {
+      console.log('🔐 Using Azure Managed Identity for Cosmos DB');
+      // Use managed identity for authentication in production
+      const credential = new DefaultAzureCredential();
+      this.client = new CosmosClient({
+        endpoint,
+        aadCredentials: credential
+      });
+    }
 
     this.database = this.client.database(databaseName);
     this.usersContainer = this.database.container('users');

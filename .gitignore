@@ -157,6 +157,9 @@ build/
 .env.local
 .env.*.local
 
+# Azure Functions local settings
+local.settings.json
+
 # Debug files
 debug.log
 npm-debug.log*
